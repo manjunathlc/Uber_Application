@@ -1,6 +1,5 @@
 package com.jsp.uber.strategies.impl;
 
-import com.jsp.uber.dto.RideRequestDto;
 import com.jsp.uber.entites.RideRequest;
 import com.jsp.uber.services.DistanceService;
 import com.jsp.uber.strategies.RideFareCalculationStrategy;

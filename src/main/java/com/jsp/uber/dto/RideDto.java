@@ -1,29 +1,31 @@
 package com.jsp.uber.dto;
 
-import com.jsp.uber.entites.Driver;
-import com.jsp.uber.entites.Rider;
 import com.jsp.uber.entites.enums.PaymentMethod;
 import com.jsp.uber.entites.enums.RideStatus;
-import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
+@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class RideDto {
 
     private Long id;
 
-    private Point pickUpLocation;
+    private PointDto pickUpLocation;
 
-    private Point dropOffLocation;
+    private PointDto dropOffLocation;
 
 
     private LocalDateTime createdTime;
 
-    private RiderDto riderDto;
+    private RiderDto rider;
 
-    private DriverDto driverDto;
+    private DriverDto driver;
 
     private PaymentMethod paymentMethod;
 
