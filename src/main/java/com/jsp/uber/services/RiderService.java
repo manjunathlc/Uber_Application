@@ -6,6 +6,8 @@ import com.jsp.uber.dto.RideRequestDto;
 import com.jsp.uber.dto.RiderDto;
 import com.jsp.uber.entites.Rider;
 import com.jsp.uber.entites.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
@@ -15,13 +17,11 @@ public interface RiderService {
 
     RideDto cancelRide(Long rideId);   // DriverId is automatically taken through spring security context holder
 
-
-
     DriverDto rateDriver(Long rideId, Integer rating);
 
     RiderDto getMyProfile();
 
-    List<RideDto> getAllMyRides();
+    Page<RideDto> getAllMyRides(PageRequest pageRequest);
 
     Rider createNewRider(User user);
 

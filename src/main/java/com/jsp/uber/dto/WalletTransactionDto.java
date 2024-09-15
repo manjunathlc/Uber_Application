@@ -1,42 +1,38 @@
-package com.jsp.uber.entites;
+package com.jsp.uber.dto;
 
+import com.jsp.uber.entites.Ride;
+import com.jsp.uber.entites.Wallet;
 import com.jsp.uber.entites.enums.TransactionMethod;
 import com.jsp.uber.entites.enums.TransactionType;
-import jakarta.persistence.*;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
-@Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class WalletTransaction {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+@NoArgsConstructor
+public class WalletTransactionDto {
+
     private Long id;
 
     private double amount;
 
-    @Enumerated(EnumType.STRING)
     private TransactionType transactionType;
 
-    @Enumerated(EnumType.STRING)
     private TransactionMethod transactionMethod;
 
-    @OneToOne
-    private Ride ride;
+    private RideDto ride;
 
     private String transactionId;
 
-    @ManyToOne
-    private Wallet wallet;
+    private WalletDto wallet;
 
-    @CreationTimestamp
     private LocalDateTime timestamp;
 }

@@ -4,6 +4,7 @@ import com.jsp.uber.dto.RideRequestDto;
 import com.jsp.uber.entites.Driver;
 import com.jsp.uber.entites.Ride;
 import com.jsp.uber.entites.RideRequest;
+import com.jsp.uber.entites.Rider;
 import com.jsp.uber.entites.enums.RideRequestStatus;
 import com.jsp.uber.entites.enums.RideStatus;
 import com.jsp.uber.exceptions.ResourceNotFoundException;
@@ -32,10 +33,6 @@ public class RideServiceImpl implements RideService {
                 .orElseThrow(() -> new ResourceNotFoundException("Ride not found with id " + rideId));
     }
 
-    @Override
-    public void matchWithDrivers(RideRequestDto rideRequestDto) {
-
-    }
 
     @Override
     public Ride createNewRide(RideRequest rideRequest, Driver driver) {
@@ -57,8 +54,13 @@ public class RideServiceImpl implements RideService {
     }
 
     @Override
-    public Page<Ride> getAllRidesOfRider(Long driverId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
+        return rideRepository.findByRider(rider, pageRequest);
+    }
+
+    @Override
+    public Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver, pageRequest);
     }
 
     private String generateRandomOTP(){
