@@ -11,6 +11,7 @@ import com.jsp.uber.entites.enums.RideStatus;
 import com.jsp.uber.exceptions.ResourceNotFoundException;
 import com.jsp.uber.repositories.DriverRepository;
 import com.jsp.uber.services.DriverService;
+import com.jsp.uber.services.PaymentService;
 import com.jsp.uber.services.RideRequestService;
 import com.jsp.uber.services.RideService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class DriverServiceImpl implements DriverService {
     private final RideRequestService rideRequestService;
     private final DriverRepository driverRepository;
     private final RideService rideService;
+    private final PaymentService paymentService;
     private final ModelMapper modelMapper;
 
     @Override
@@ -93,12 +95,33 @@ public class DriverServiceImpl implements DriverService {
 
         ride.setStartAt(LocalDateTime.now());
         Ride savedRide = rideService.updateRideStatus(ride, RideStatus.ONGOING);
+        paymentService.createNewPayment(savedRide);
+
+
         return modelMapper.map(savedRide, RideDto.class);
     }
 
     @Override
+    @Transactional
     public RideDto endRide(Long rideId) {
-        return null;
+        Ride ride = rideService.getRideById(rideId);
+        Driver driver = getCurrentDriver();
+        if(!ride.getDriver().equals(driver)){
+//            throw new RuntimeException("Ride is not assigned to current driver");
+            throw new RuntimeException("Driver cannot start ride as he has not accepted it earlier");
+        }
+
+        if(!ride.getRideStatus().equals(RideStatus.ONGOING)){
+            throw new RuntimeException("Ride Status is not ONGOING hence cannot be ended, status is " +ride.getRideStatus());
+        }
+
+        ride.setEndAt(LocalDateTime.now());
+        Ride savedRide = rideService.updateRideStatus(ride, RideStatus.ENDED);
+        updateDriverAvailability(driver,true);
+
+        paymentService.processPayment(ride);
+
+        return modelMapper.map(savedRide, RideDto.class);
     }
 
     @Override
