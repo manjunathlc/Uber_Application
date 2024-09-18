@@ -1,13 +1,18 @@
 package com.jsp.uber.entites;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.locationtech.jts.geom.Point;
 
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Table(indexes = {
+        @Index(name = "idx_driver_vehicleId",columnList = "vehicleId")
+})
 public class Driver {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
