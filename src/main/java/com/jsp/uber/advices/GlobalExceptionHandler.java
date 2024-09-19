@@ -2,12 +2,15 @@ package com.jsp.uber.advices;
 
 import com.jsp.uber.exceptions.ResourceNotFoundException;
 import com.jsp.uber.exceptions.RuntimeConflictException;
+import io.jsonwebtoken.JwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import javax.naming.AuthenticationException;
+import java.nio.file.AccessDeniedException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +33,36 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.CONFLICT)
                 .message(exception.getMessage())
                 .build();
+
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ApiResponse<?>> handleAuthenticationException(AuthenticationException exception){
+        ApiError apiError= ApiError.builder()
+                .status(HttpStatus.UNAUTHORIZED)
+                .message(exception.getMessage())
+                .build();
+
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<ApiResponse<?>> handleJwtException(JwtException exception){
+        ApiError apiError= ApiError.builder()
+                .status(HttpStatus.UNAUTHORIZED)
+                .message(exception.getMessage())
+                .build();
+
+        return buildErrorResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ApiResponse<?>> handleAccessDeniedException(AccessDeniedException exception){
+        ApiError apiError= ApiError.builder()
+                .status(HttpStatus.FORBIDDEN)
+                .message("Access denied")
+               .build();
 
         return buildErrorResponseEntity(apiError);
     }

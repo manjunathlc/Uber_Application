@@ -6,9 +6,11 @@ import com.jsp.uber.dto.UserDto;
 
 public interface AuthService {
 
-    String login(String email, String password);        // returns tokens
+    String[] login(String email, String password);        // returns tokens
 
     UserDto signup(SignupDto signup);
 
     DriverDto onBoardNewDriver(Long userId, String vehicleId);
+
+    String refreshToken(String refreshToken);
 }

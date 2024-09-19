@@ -80,7 +80,7 @@ public class WalletServiceImpl implements WalletService {
     @Override
     public Wallet createNewWallet(User user) {
         Wallet wallet = new Wallet();
-        wallet.setId(user.getId());
+        wallet.setUser(user);
         return walletRepository.save(wallet);
 
     }
